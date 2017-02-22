@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">basicLauncher</string>
+    <string name="title_activity_apps_list">AppsListActivity</string>
+    <string name="Camera">Camera</string>
+    <string name="Unlock">Unlock</string>
+
+</resources>
+
