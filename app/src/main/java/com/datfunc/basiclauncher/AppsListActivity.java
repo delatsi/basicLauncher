@@ -48,42 +48,6 @@ public class AppsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apps_list);
 
-        final View decorView = getWindow().getDecorView();
-        // Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-
-
-        // Remember that you should never show the action bar if the
-        // status bar is hidden, so hide that too if necessary.
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null )
-        {
-            actionBar.hide();
-        }
-
-        decorView.setOnSystemUiVisibilityChangeListener
-                (new View.OnSystemUiVisibilityChangeListener() {
-                    @Override
-                    public void onSystemUiVisibilityChange(int visibility) {
-                        // Note that system bars will only be "visible" if none of the
-                        // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
-                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                            // TODO: The system bars are visible. Make any desired
-                            // adjustments to your UI, such as showing the action bar or
-                            // other navigational controls.
-                            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
-                            decorView.setSystemUiVisibility(uiOptions);
-                        } else {
-                            // TODO: The system bars are NOT visible. Make any desired
-                            // adjustments to your UI, such as hiding the action bar or
-                            // other navigational controls.
-                            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
-                            decorView.setSystemUiVisibility(uiOptions);
-                        }
-                    }
-                });
-
         loadApps();
         loadListView();
         addClickListener();
@@ -100,18 +64,48 @@ public class AppsListActivity extends AppCompatActivity {
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
+//        List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
 
 
-        for (ResolveInfo ri : availableActivities){
+//        for (ResolveInfo ri : availableActivities){
+//
+//            AppDetail app = new AppDetail();
+//            app.label = ri.loadLabel(manager);
+//            app.name = ri.activityInfo.packageName;
+//            app.icon = ri.activityInfo.loadIcon(manager);
+//            apps.add(app);
+//
+//        }
 
-            AppDetail app = new AppDetail();
-            app.label = ri.loadLabel(manager);
-            app.name = ri.activityInfo.packageName;
-            app.icon = ri.activityInfo.loadIcon(manager);
-            apps.add(app);
 
-        }
+        AppDetail chrome = new AppDetail();
+        chrome.label = "Chrome";
+        chrome.name = "com.google.chrome";
+
+        AppDetail google = new AppDetail();
+        google.label = "Google";
+        google.name = "com.google.android.googlequicksearchbox";
+
+        AppDetail inbox = new AppDetail();
+        chrome.label = "Inbox";
+        chrome.name = "com.google.inbox";
+
+        AppDetail instagram = new AppDetail();
+        chrome.label = "Instagram";
+        chrome.name = "com.instagram.android";
+
+        AppDetail photos = new AppDetail();
+        chrome.label = "Photos";
+        chrome.name = "com.google.android.apps.photos";
+
+
+        apps.add(chrome);
+        apps.add(google);
+        apps.add(inbox);
+        apps.add(instagram);
+        apps.add(photos);
+
+
 
         /*Implemented Comapartor for class Apptetail , takes a charSequence and converst to string for compare*/
         Comparator<AppDetail> comparator = new Comparator<AppDetail>() {
@@ -121,32 +115,7 @@ public class AppsListActivity extends AppCompatActivity {
             }
         };
 
-        Collections.sort(apps, comparator);
-
-        /** CODE TO LOAD PROCESSES THAT ARE RUNNING ON Phone
-         * Turns out this is deprcated as of API 21
-        ActivityManager activityManager = (ActivityManager)
-                this.getSystemService(ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> processes = activityManager.getRunningAppProcesses();
-        Log.i("ListViewLogs", "Number of running apps= "+ processes.size());
-
-         for (ActivityManager.RunningAppProcessInfo am : processes){
-
-         AppDetail app = new AppDetail();
-         try{
-         app.label = (String) manager.getApplicationLabel((manager.getApplicationInfo(am.processName, PackageManager.GET_META_DATA)));
-         } catch (PackageManager.NameNotFoundException e){
-         return;
-         }
-         runningApps.add(app);
-
-         }
-         **/
-
-
-
-
-
+      //  Collections.sort(apps, comparator);
 
 
     }
