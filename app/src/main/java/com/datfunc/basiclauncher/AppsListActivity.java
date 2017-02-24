@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -39,6 +40,12 @@ public class AppsListActivity extends AppCompatActivity {
     private List<AppDetail> apps;
     private ListView list;
     private List<AppDetail> runningApps;
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("M-d-yyyy HH:mm:ss");
+
+
+    Context context = this;
+    public static final String USAGE_STATS_SERVICE = "usagestats";
+    private static final String TAG = "USAGE_STATS";
 
 
     @Override
@@ -64,8 +71,70 @@ public class AppsListActivity extends AppCompatActivity {
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
 
-//        List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
 
+        final UsageStatsManager usageStatsManager=(UsageStatsManager)context.getSystemService(Context.USAGE_STATS_SERVICE);// Context.USAGE_STATS_SERVICE);
+        final int currentYear=Calendar.getInstance().get(Calendar.YEAR);
+
+
+        Calendar beginCal = Calendar.getInstance();
+        beginCal.set(Calendar.DATE, 1);
+        beginCal.set(Calendar.MONTH, 0);
+        beginCal.set(Calendar.YEAR, 2016);
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.set(Calendar.DATE, 1);
+        endCal.set(Calendar.MONTH, 0);
+        endCal.set(Calendar.YEAR, 2018);
+
+        final List<UsageStats> queryUsageStats=usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, beginCal.getTimeInMillis(), endCal.getTimeInMillis());
+
+
+        long startTime = beginCal.getTimeInMillis();
+        long endTime = endCal.getTimeInMillis();
+
+
+
+        //Log.i(TAG, "Range start:" + dateFormat.format(startTime) );
+        //Log.i(TAG, "Range end:" + dateFormat.format(endTime));
+
+        UsageEvents uEvents = usageStatsManager.queryEvents(startTime,endTime);
+       /* while (uEvents.hasNextEvent()) {
+            UsageEvents.Event e = new UsageEvents.Event();
+            uEvents.getNextEvent(e);
+
+            if (e != null) {
+                Log.d("USAGE_EVENT", "Event: " + e.getPackageName() + "\t" + e.getTimeStamp() + "\t" );
+            }
+
+        }*/
+
+        for (UsageStats u : queryUsageStats){
+            if (u.getTotalTimeInForeground() > 0)
+            {
+                AppDetail app = new AppDetail();
+                try{
+                    ApplicationInfo ai = manager.getApplicationInfo(u.getPackageName(), PackageManager.GET_META_DATA);
+                    app.name = u.getPackageName();
+                    app.label = manager.getApplicationLabel(ai);
+                    apps.add(app);
+
+                }
+                catch(PackageManager.NameNotFoundException e){
+
+                Log.i("PACKAGE_MANAGER", "FAILED TO FETCH Application Info");
+            }
+
+                Log.i("USAGE_STATS",  u.getPackageName());
+            }
+        }
+
+
+
+
+        //printCurrentUsageStatus(AppsListActivity.this);
+      //  printActiveApps(queryUsageStats);
+
+        List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
 
 //        for (ResolveInfo ri : availableActivities){
 //
@@ -73,39 +142,12 @@ public class AppsListActivity extends AppCompatActivity {
 //            app.label = ri.loadLabel(manager);
 //            app.name = ri.activityInfo.packageName;
 //            app.icon = ri.activityInfo.loadIcon(manager);
-//            apps.add(app);
+//
+//            if(!usageStatsManager.isAppInactive((String)app.name)){
+//                apps.add(app);
+//            }
 //
 //        }
-
-
-        AppDetail chrome = new AppDetail();
-        chrome.label = "Chrome";
-        chrome.name = "com.google.chrome";
-
-        AppDetail google = new AppDetail();
-        google.label = "Google";
-        google.name = "com.google.android.googlequicksearchbox";
-
-        AppDetail inbox = new AppDetail();
-        chrome.label = "Inbox";
-        chrome.name = "com.google.inbox";
-
-        AppDetail instagram = new AppDetail();
-        chrome.label = "Instagram";
-        chrome.name = "com.instagram.android";
-
-        AppDetail photos = new AppDetail();
-        chrome.label = "Photos";
-        chrome.name = "com.google.android.apps.photos";
-
-
-        apps.add(chrome);
-        apps.add(google);
-        apps.add(inbox);
-        apps.add(instagram);
-        apps.add(photos);
-
-
 
         /*Implemented Comapartor for class Apptetail , takes a charSequence and converst to string for compare*/
         Comparator<AppDetail> comparator = new Comparator<AppDetail>() {
@@ -115,7 +157,7 @@ public class AppsListActivity extends AppCompatActivity {
             }
         };
 
-      //  Collections.sort(apps, comparator);
+       Collections.sort(apps, comparator);
 
 
     }
@@ -152,28 +194,47 @@ public class AppsListActivity extends AppCompatActivity {
 
     }
 
-    private void loadListViewRunning() {
-        list = (ListView) findViewById(R.id.running_apps_list);
-
-
-        ArrayAdapter<AppDetail> adapter = new ArrayAdapter<AppDetail>(this, R.layout.list_item, runningApps){
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent){
-                if(convertView == null){
-                    convertView = getLayoutInflater().inflate(R.layout.list_item, null);
-                }
-
-                TextView appLabel = (TextView)convertView.findViewById(R.id.item_app_label);
-                appLabel.setText(runningApps.get(position).label);
-
-                return convertView;
-            }
-        };
-
-        list.setAdapter(adapter);
-
+    public static void printUsageStats(List<UsageStats> usageStatsList){
+        for (UsageStats u : usageStatsList){
+            Log.d("USAGE_STATS", "Pkg: " + u.getPackageName() +  "\t" + "ForegroundTime: "
+                    + u.getTotalTimeInForeground()) ;
+        }
 
     }
+
+    public static void printActiveApps(List<UsageStats> usageStatsList){
+        for (UsageStats u : usageStatsList){
+            if (u.getTotalTimeInForeground() > 0)
+            {
+                Log.i("USAGE_STATS",  u.getPackageName());
+            }
+        }
+    }
+
+    public static List<UsageStats> getUsageStatsList(Context context){
+        UsageStatsManager usm = getUsageStatsManager(context);
+        Calendar calendar = Calendar.getInstance();
+        long endTime = calendar.getTimeInMillis();
+        calendar.add(Calendar.YEAR, -1);
+        long startTime = calendar.getTimeInMillis();
+
+        Log.d(TAG, "Range start:" + dateFormat.format(startTime) );
+        Log.d(TAG, "Range end:" + dateFormat.format(endTime));
+
+        List<UsageStats> usageStatsList = usm.queryUsageStats(UsageStatsManager.INTERVAL_DAILY,startTime,endTime);
+        return usageStatsList;
+    }
+
+
+    public static void printCurrentUsageStatus(Context context){
+        printUsageStats(getUsageStatsList(context));
+    }
+    @SuppressWarnings("ResourceType")
+    private static UsageStatsManager getUsageStatsManager(Context context){
+        UsageStatsManager usm = (UsageStatsManager) context.getSystemService("usagestats");
+        return usm;
+    }
+
 
 
     public void goHome(View v){
