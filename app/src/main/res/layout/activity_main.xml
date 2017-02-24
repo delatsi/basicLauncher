@@ -1,42 +1,120 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#000">
 
 
-    <android.widget.TextClock
-        android:id="@+id/digitalClock"
+    <Button
+            android:id="@+id/recent_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Recent"
+            android:onClick="showApps"
+            android:background="#000"
+            android:textColor="@color/colorButtonText"
+        android:textSize="20sp"
+
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/home_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:timeZone="GMT-0700"
-        android:format24Hour="dd MMM yyyy   kk:mm:ss"
-        android:format12Hour="@null"
-        android:textSize="36sp"
-        android:textColor="@color/colorText"
-        android:paddingTop="40dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:text="@string/Back"
+        android:onClick="showApps"
+        android:background="#000"
+        android:textColor="@color/colorButtonText"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:textSize="20sp"
         />
 
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Home"
+        android:onClick="showApps"
+        android:background="#000"
+        android:textColor="@color/colorButtonText"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:text="@string/Wifi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvWifi"
+        android:textColor="@color/colorText"
+        tools:text="Wifi 3/3"
+        android:layout_alignParentTop="true"
+        android:paddingTop="5dp"
+        android:layout_alignStart="@+id/recent_button" />
+
+    <TextView
+        android:text="@string/Network"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvNetwork"
+        android:textColor="@color/colorText"
+        tools:text="Network 4/5"
+        android:layout_alignParentTop="true"
+        android:paddingTop="5dp"
+        android:layout_alignEnd="@+id/button4" />
 
     <TextView
         android:id="@+id/delaDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:textColor="@color/colorText"
-        />
+        android:layout_below="@+id/digitalClock"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/digitalClock" />
 
     <ListView
         android:id="@+id/apps_list"
         android:paddingTop="40dp"
-        android:layout_height="wrap_content"
+        android:layout_height="347dp"
         android:layout_width="wrap_content"
         android:textColor="@color/colorText"
-        />
+        android:layout_above="@+id/recent_button"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/delaDate" />
+
+    <android.widget.TextClock
+        android:id="@+id/digitalClock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:timeZone="GMT-0800"
+        android:format24Hour="dd MMM yyyy   kk:mm:ss"
+        android:format12Hour="@null"
+        android:textSize="36sp"
+        android:textColor="@color/colorText"
+        android:paddingTop="15dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvLife" />
+
+    <TextView
+        android:text="@string/Life"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvLife"
+        android:textColor="@color/colorText"
+        tools:text="Life 97%"
+        android:paddingTop="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/home_button" />
 
 
-</LinearLayout>
+</RelativeLayout>
+
