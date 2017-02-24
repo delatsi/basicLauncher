@@ -4,5 +4,16 @@
     <string name="Camera">Camera</string>
     <string name="Unlock">Unlock</string>
 
+    <!--Button Layout -->
+    <string name="Home">Home</string>
+    <string name="Back">Back</string>
+    <string name="Recent">Recent</string>
+
+    <string name="Network">Network</string>
+    <string name="Life">Life</string>
+    <string name="Wifi">Wifi</string>
+
+
+
 </resources>
 
