@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
        final View decorView = getWindow().getDecorView();
         // Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN| View.SYSTEM_UI_FLAG_FULLSCREEN;
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
 
@@ -82,13 +82,13 @@ public class MainActivity extends AppCompatActivity {
                             // TODO: The system bars are visible. Make any desired
                             // adjustments to your UI, such as showing the action bar or
                             // other navigational controls.
-                            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION| View.SYSTEM_UI_FLAG_FULLSCREEN;
+                            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
                             decorView.setSystemUiVisibility(uiOptions);
                         } else {
                             // TODO: The system bars are NOT visible. Make any desired
                             // adjustments to your UI, such as hiding the action bar or
                             // other navigational controls.
-                            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
+                            int uiOptions =  View.SYSTEM_UI_FLAG_FULLSCREEN;
                             decorView.setSystemUiVisibility(uiOptions);
                         }
                     }
@@ -205,6 +205,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void showApps(View v){
+        Intent i = new Intent(this, AppsListActivity.class);
+        startActivity(i);
+
+    }
+
+
     private void addClickListener() {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -216,5 +223,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
 
 }
