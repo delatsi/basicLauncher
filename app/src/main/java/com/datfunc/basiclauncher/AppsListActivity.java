@@ -27,12 +27,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class AppsListActivity extends AppCompatActivity {
 
@@ -41,6 +45,9 @@ public class AppsListActivity extends AppCompatActivity {
     private ListView list;
     private List<AppDetail> runningApps;
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("M-d-yyyy HH:mm:ss");
+    private List<AppDetail> app_labels;
+
+
 
 
     Context context = this;
@@ -98,25 +105,30 @@ public class AppsListActivity extends AppCompatActivity {
         //Log.i(TAG, "Range end:" + dateFormat.format(endTime));
 
         UsageEvents uEvents = usageStatsManager.queryEvents(startTime,endTime);
-       /* while (uEvents.hasNextEvent()) {
-            UsageEvents.Event e = new UsageEvents.Event();
-            uEvents.getNextEvent(e);
+//       while (uEvents.hasNextEvent()) {
+//            UsageEvents.Event e = new UsageEvents.Event();
+//            uEvents.getNextEvent(e);
+//
+//            if (e != null) {
+//                Log.d("USAGE_EVENT", "Event: " + e.getPackageName() + "\t" + e.getTimeStamp() + "\t" );
+//            }
+//
+//        }
 
-            if (e != null) {
-                Log.d("USAGE_EVENT", "Event: " + e.getPackageName() + "\t" + e.getTimeStamp() + "\t" );
-            }
+        //printActiveApps(queryUsageStats);
 
-        }*/
 
         for (UsageStats u : queryUsageStats){
             if (u.getTotalTimeInForeground() > 0)
             {
-                AppDetail app = new AppDetail();
                 try{
                     ApplicationInfo ai = manager.getApplicationInfo(u.getPackageName(), PackageManager.GET_META_DATA);
-                    app.name = u.getPackageName();
-                    app.label = manager.getApplicationLabel(ai);
+                    AppDetail app = new AppDetail();
                     apps.add(app);
+                    //app_labels.add(app);
+
+                    Log.i("ARE_YOU_NULL",  u.getPackageName());
+
 
                 }
                 catch(PackageManager.NameNotFoundException e){
@@ -124,15 +136,45 @@ public class AppsListActivity extends AppCompatActivity {
                 Log.i("PACKAGE_MANAGER", "FAILED TO FETCH Application Info");
             }
 
-                Log.i("USAGE_STATS",  u.getPackageName());
             }
         }
+
+//        while(iterator.hasNext())
+//        {
+//            String app_label = iterator.next();
+//            try{
+//            ApplicationInfo ai = manager.getApplicationInfo(app_label, PackageManager.GET_META_DATA);
+//
+//
+//
+//            }
+//
+//
+//
+//            catch(PackageManager.NameNotFoundException e){
+//            Log.i("PACKAGE_MANAGER", "FAILED TO FETCH Application Info");
+//
+//            AppDetail app = new AppDetail();
+//            app.label = app_label;
+//            apps.add(app);
+//            app_labels.add(app);
+//
+//        }
+//
+ //           }
+
+//        Object[] myLabels = app_labels.toArray();
+//        for( String label : app_labels)
+//        {
+//            Log.i("PACKAGE_MANAGER", "Application Info"+label);
+//
+//        }
+
 
 
 
 
         //printCurrentUsageStatus(AppsListActivity.this);
-      //  printActiveApps(queryUsageStats);
 
         List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
 
@@ -157,7 +199,7 @@ public class AppsListActivity extends AppCompatActivity {
             }
         };
 
-       Collections.sort(apps, comparator);
+      // Collections.sort(apps, comparator);
 
 
     }
@@ -202,7 +244,7 @@ public class AppsListActivity extends AppCompatActivity {
 
     }
 
-    public static void printActiveApps(List<UsageStats> usageStatsList){
+    public void printActiveApps(List<UsageStats> usageStatsList){
         for (UsageStats u : usageStatsList){
             if (u.getTotalTimeInForeground() > 0)
             {

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="10dp"
         android:textColor="@color/colorText"
-        android:textSize="20sp"
+        android:textSize="18sp"
         />
 
 

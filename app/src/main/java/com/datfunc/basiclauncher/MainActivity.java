@@ -2,6 +2,7 @@ package com.datfunc.basiclauncher;
 
 import android.app.ActionBar;
 import android.app.ActivityManager;
+import android.app.WallpaperManager;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
@@ -11,13 +12,16 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,12 +69,37 @@ public class MainActivity extends AppCompatActivity {
 
         String currentDateString = DateFormat.getDateInstance().format(new Date());
         // textView is the TextView view that should display it
-        TextView textView = (TextView)findViewById(R.id.delaDate);
-        textView.setText(currentDateString);
+        //TextView textView = (TextView)findViewById(R.id.delaDate);
+        //textView.setText(currentDateString);
 
         loadApps();
         loadListView();
         addClickListener();
+
+        Intent intent = new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
+
+
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        // get the height and width of screen
+        int height = metrics.heightPixels;
+        int width = metrics.widthPixels;
+
+        Bitmap bitmap = Bitmap.createBitmap(width,height, Bitmap.Config.ARGB_8888);
+
+
+
+        WallpaperManager wallpaperManager = WallpaperManager
+                .getInstance(getApplicationContext());
+
+        try {
+            wallpaperManager.setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK);
+            wallpaperManager.setBitmap(bitmap, null, true, WallpaperManager.FLAG_SYSTEM);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -170,6 +200,8 @@ public class MainActivity extends AppCompatActivity {
     public void showApps(View v){
         Intent i = new Intent(this, AppsListActivity.class);
         startActivity(i);
+        //Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+        //startActivity(intent);
 
     }
 
